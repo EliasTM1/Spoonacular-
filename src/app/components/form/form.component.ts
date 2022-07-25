@@ -1,4 +1,3 @@
-import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import {
   FormArray,
@@ -7,18 +6,25 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { sample } from 'rxjs';
 import { Intolerances, UserPrvt } from '../../../interfaces/user.interface';
 import { MOCK_INTOLERANCES } from '../../mocks/intolerances';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-
+import { IngredientsService } from 'src/app/ingredients.service';
+import { Ingredient } from 'src/interfaces/recipes.interfaces';
+import { Store } from '@ngrx/store';
+import { FormPageActions } from 'src/app/ngrx';
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css'],
 })
 export class FormComponent implements OnInit {
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private ingredientService: IngredientsService,
+    private store: Store,
+
+  ) {}
 
   //  * FORM STEPS
   currentStep: string[] = [];
@@ -34,11 +40,13 @@ export class FormComponent implements OnInit {
   userHeight: string | null = '';
   userHeightUnit: string | null = '';
   userIntoleranceList: number[] = [];
-
+  staticIngredients: Ingredient[] = [];
   MOCK_INTOLERANCES = MOCK_INTOLERANCES;
   selectedIndex!: number;
   activeIndex!: number;
-
+  // * SUGGESTIONS
+  currentSuggestions: Ingredient[] = [];
+  matches: any[] = [];
   // ? Form Group
   personalForm = this.fb.group({
     //  ? Peronsal
@@ -57,8 +65,8 @@ export class FormComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.currentStep.push(this.startEnrollmentStep);
-
+    this.store.dispatch(FormPageActions.init())
+    this.currentStep.push(this.addLikes);
     // this.personalForm.valueChanges.forEach((value) => {});
     this.personalForm.valueChanges.pipe(
       debounceTime(400),
@@ -67,12 +75,16 @@ export class FormComponent implements OnInit {
         terms;
       })
     );
+    this.currentSuggestions = this.ingredientService.getIngredients();
   }
+
+  addPreference() {
+
+  }
+
 
   //  * FORM STEPS
   previousStep() {
-    console.log('this.currentStep');
-    console.log(this.currentStep);
     this.currentStep.shift();
   }
 
@@ -80,7 +92,6 @@ export class FormComponent implements OnInit {
     e.preventDefault();
     this.mapUserData();
     this.currentStep.unshift(this.confirmInfoStep);
-
   }
 
   enrollomentAllergens() {
@@ -98,29 +109,16 @@ export class FormComponent implements OnInit {
   //  * ENDS FORM STEPS
 
   getUsrSettings(e: any) {
-    console.log({ PARAMS: e });
     this.personalForm.controls['settings'];
-    console.log({
-      settings: this.personalForm.controls['settings'],
-    });
   }
 
   mapUserData() {
-    this.userName= this.personalForm.controls.firstName.value
-    this.userAge = this.personalForm.controls.age.value
-    this.userWeight = this.personalForm.controls.weigth.value
-    this.userWeightUnit = this.personalForm.controls.weightUnit.value
-    this.userHeight = this.personalForm.controls.height.value
-    this.userHeightUnit = this.personalForm.controls.heightUnit.value
-
-    console.log(this.userName);
-
-    console.warn(this.userName, 'from mapUserData');
-    console.warn(this.userAge, 'from mapUserData');
-    console.warn(this.userWeight, 'from mapUserData');
-    console.warn(this.userWeightUnit, 'from mapUserData');
-    console.warn(this.userHeight, 'from mapUserData');
-    console.warn(this.userHeightUnit, 'from mapUserData');
+    this.userName = this.personalForm.controls.firstName.value;
+    this.userAge = this.personalForm.controls.age.value;
+    this.userWeight = this.personalForm.controls.weigth.value;
+    this.userWeightUnit = this.personalForm.controls.weightUnit.value;
+    this.userHeight = this.personalForm.controls.height.value;
+    this.userHeightUnit = this.personalForm.controls.heightUnit.value;
   }
 
   changeStatus(index: any) {
@@ -140,7 +138,48 @@ export class FormComponent implements OnInit {
     this.userIntoleranceList.push(mynumero);
     this.activeIndex = index;
   }
+
   getActiveClass(i: any) {
     return this.activeIndex == i ? 'active' : '';
+  }
+  //  ? Returns meaning object is not present
+  isObjPresent(currentIteration: Ingredient): boolean {
+    let result: boolean = false;
+    this.matches.some((element: Ingredient) => {
+      result =
+        element.ingredient === currentIteration.ingredient ? true : false;
+    });
+    return result;
+  }
+
+  searchOnKeyUp(event: any) {
+    if (event.key === 'Backspace') {
+      this.matches = [];
+    }
+    let searchBoxState = event.target.value;
+    let regex = new RegExp('\\b(' + searchBoxState + ')\\b');
+
+    if (searchBoxState.length > 2) {
+      for (let i = 0; i < this.currentSuggestions.length; i++) {
+        const { ingredient } = this.currentSuggestions[i];
+        if (
+          ingredient.match(regex) &&
+          !this.isObjPresent(this.currentSuggestions[i])
+        ) {
+          this.matches.push(this.currentSuggestions[i]);
+        }
+      }
+    }
+
+    let temporal = this.matches.filter((e: any) => e != null);
+    console.warn(temporal, 'temporal');
+  }
+
+  clickedSuggestion(suggestionSelected: any) {
+    console.error('WASABI');
+    console.warn('WASABI');
+    console.warn(suggestionSelected);
+    console.error('WASABI');
+    console.warn('WASABI');
   }
 }
