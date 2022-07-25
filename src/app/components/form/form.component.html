@@ -1,6 +1,6 @@
 <section>
   <form class="form-container" [formGroup]="personalForm">
-    <!-- * Start Personal Data section -->
+    <!-- * Start startEnrollmentStep section -->
     <ng-container *ngIf="currentStep[0] === startEnrollmentStep">
       <!-- <label for="name">Name: </label> -->
       <div class="field-contanier">
@@ -92,9 +92,9 @@
         Next
       </button>
     </ng-container>
-    <!-- * Ends Personal Data section -->
+    <!-- * End startEnrollmentStep section -->
 
-    <!-- * Start intolerance section -->
+    <!-- * Start confirmInfoStep section -->
     <ng-container *ngIf="currentStep[0] === confirmInfoStep">
       <label for="weight">Name: </label>
       <div class="field-contanier">{{ userName }}</div>
@@ -112,9 +112,9 @@
       <button (click)="previousStep()" class="form-button">Back</button>
       <button (click)="enrollomentAllergens()" class="form-button">Next</button>
     </ng-container>
-    <!-- * Ends intolerance section -->
+    <!-- * Ends confirmInfoStep section -->
 
-    <!-- * Starts intolerance section -->
+    <!-- * Starts userIntoleranceStep section -->
     <ng-container
       *ngIf="currentStep[0] === userIntoleranceStep"
       [formArrayName="settings"
@@ -162,24 +162,24 @@
         Continue
       </button>
     </ng-container>
-    <!-- * Ends intolerance section -->
+    <!-- * Ends userIntoleranceStep section -->
 
     <!-- * Start addLikes section -->
     <ng-container *ngIf="currentStep[0] === addLikes">
-      <h1>Hola</h1>
-      <label for="searchIngredients"></label>
-      <input
-        type="text"
-        name="searchIngredients"
-        id="searchIngredients"
-        placeholder="Search Ingredients"
-      />
+      <h1>Search for Ingredients</h1>
       <button
-        class="form-button"
+        class="form-button like"
         [disabled]="!personalForm.valid"
         (click)="addPreferences()"
       >
-        Continue
+        +
+      </button>
+      <button
+        class="form-button dislike"
+        [disabled]="!personalForm.valid"
+        (click)="addPreferences()"
+      >
+        -
       </button>
       <button
         class="form-button"
@@ -188,7 +188,40 @@
       >
         Back
       </button>
+      <div class="inputContainer">
+        <label for="ingredientsSuggest"></label>
+        <input
+          class="input-field"
+          placeholder="1000 ingredients"
+          type="text"
+          list="ingredientsSuggest"
+          (keyup)="searchOnKeyUp($event)"
+        />
+        <ng-container *ngFor="let suggestion of matches; let i = index">
+          <div
+            #optionSuggestion
+            class="optionSuggest"
+            (click)="clickedSuggestion(suggestion)"
+          >
+            {{ suggestion.ingredient }}
+            <button
+              class="form-button like"
+              [disabled]="!personalForm.valid"
+              (click)="addPreferences()"
+            >
+              +
+            </button>
+            <button
+              class="form-button dislike"
+              [disabled]="!personalForm.valid"
+              (click)="addPreferences()"
+            >
+              -
+            </button>
+          </div>
+        </ng-container>
+      </div>
     </ng-container>
-    <!-- * Ends intolerance section -->
+    <!-- * Ends addLikes section -->
   </form>
 </section>

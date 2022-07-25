@@ -96,3 +96,10 @@ export interface ProductMatch {
   score: number;
   link: string;
 }
+
+
+export interface Ingredient {
+  ingredient : string;
+  ingredientId: number
+}
+
