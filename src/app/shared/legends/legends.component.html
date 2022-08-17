@@ -1,0 +1,8 @@
+<div class="legends-container">
+  <div  class="legenf-container"  *ngFor="let category of legendCategories">
+    {{category.description | titlecase}}
+      <img [src]="category.src" alt="">
+  </div>
+</div>
+
+

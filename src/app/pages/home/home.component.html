@@ -1,0 +1,9 @@
+<div *ngIf="!isLoading; else loading">
+  <app-card [responseRandom]="randomRecipes" [cardUseCase]="'random'"></app-card>
+</div>
+
+
+
+<ng-template #loading>
+  <app-loading></app-loading>
+</ng-template>

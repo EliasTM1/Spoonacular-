@@ -1,0 +1,37 @@
+
+  <div class="grid-contr" *ngIf="!isLoading; else loading">
+    <div class="test" *ngIf="!errorUi; else error">
+        <div class="card-contnr" *ngFor="let receta of newRandomMap">
+          <div class="card-body">
+            <img class="card-img" [src]="receta.image" alt="" />
+            <div class="info-section">{{receta.title}}</div>
+            <!-- <div class="info-section" *ngFor="let likes of newRandomMap.groupLikesforIcons"></div> -->
+            <div class="card-desc">
+              <span class="card-title">some</span>
+              <div class="desc">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis cum non
+                voluptas soluta vitae ea ipsam magni consequatur minima corporis.
+              </div>
+            </div>
+            <button>Get Full Recipe </button>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <ng-template #details>
+    <app-card-details></app-card-details>
+  </ng-template>
+
+  <ng-template #loading>
+    <app-loading></app-loading>
+  </ng-template>
+
+  <ng-template #error>
+
+      <app-error [inputMsg]="'Something went wrong :('"></app-error>
+  </ng-template>
+
+<!-- <div class="container-fluid">
+  <pre>{{newRandomMap | json}} </pre>
+</div> -->

@@ -5,9 +5,11 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "server": "json-server db.json --port 3000"
+    "concat:mocks": "node \"./mocks/concat-json.js\"",
+    "mock:server": "json-server -- watch mocks/data.json",
+    "start:proxy": "ng serve --proxy-config proxy.conf.json",
+    "start:proxy:mock:server": "concurrently --kill-others \"npm run mock:server\" \"npm run start:proxy\""
   },
   "private": true,
   "dependencies": {
@@ -21,8 +23,10 @@
     "@angular/router": "^14.0.0",
     "@ngrx/store": "^14.0.2",
     "@ngrx/store-devtools": "^14.0.2",
+    "json-concat": "^0.0.1",
     "json-server": "^0.17.0",
     "rxjs": "~7.5.0",
+    "save-dev": "^0.0.1-security",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },
@@ -31,6 +35,7 @@
     "@angular/cli": "~14.0.5",
     "@angular/compiler-cli": "^14.0.0",
     "@types/jasmine": "~4.0.0",
+    "concurrently": "^7.3.0",
     "jasmine-core": "~4.1.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",

@@ -1,6 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 
-import {Ingredient} from "../../../interfaces/recipes.interfaces";
+import {Ingredient} from "../../interfaces/recipes.interfaces";
 
 export const init = createAction('[From Page] Init');
 
