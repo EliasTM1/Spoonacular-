@@ -1,0 +1,32 @@
+.table-container{
+border: 2px black solid;
+}
+
+table{
+  border: 1px black solid;
+  width: 100%;
+}
+
+th{
+  border: 1px black solid;
+  text-align: center;
+  cursor: pointer;
+}
+
+th i{
+  margin: 10px;
+}
+
+tbody{
+  background-color: cornsilk;
+}
+
+tr{
+  border: 1px black solid;
+}
+
+td {
+  border: 1px black solid;
+  padding: 5px;
+}
+

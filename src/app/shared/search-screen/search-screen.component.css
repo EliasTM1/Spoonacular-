@@ -1,0 +1,50 @@
+h2{
+  text-align: center;
+}
+
+.simple-search-contr {
+  display: flex;
+  justify-content: center;
+}
+
+.empty-search{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.simple-search-contr input {
+  border-radius: 5px;
+  height: 1.75rem;
+  font-weight: bolder;
+}
+
+
+.advanced-search-contr input {
+  margin: 50px auto;
+  display: block;
+  height: 50px;
+  width: 100%;
+  text-align: center;
+  font-weight: 700;
+  font-size: x-large;
+  font-style: italic;
+}
+
+.advanced-search-contr input::placeholder {
+  text-align: center;
+}
+
+button {
+  display: block;
+  margin: 50px auto;
+  border: none;
+  height: 50px;
+  width: 300px;
+  font-weight: 700;
+  font-size: x-large;
+  background-color: #277BC0;
+  color: white;
+  border-radius: 5px;
+}

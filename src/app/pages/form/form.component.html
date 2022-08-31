@@ -97,19 +97,14 @@
 
     <!-- * Start confirmInfoStep section -->
     <ng-container *ngIf="currentStep[0] === confirmInfoStep">
-      <label for="weight">Name: </label>
-      <div class="field-contanier">{{ userName }}</div>
+      <label for="weight">Name: {{userName$ | async}} </label>
+      <div class="field-contanier"></div>
       <label for="weight">Age: </label>
-      <div class="field-contanier">{{ userAge }}</div>
+      <div class="field-contanier">{{ userAge$ | async }}</div>
       <label for="weight">Weight: </label>
-      <div class="field-contanier">{{ userWeight }}</div>
-      <label for="weight">Weight Units: </label>
-      <div class="field-contanier">{{ userWeightUnit }}</div>
+      <div class="field-contanier">{{ userWeight$ | async }} {{ userWeightUnit$ | async }}</div>
       <label for="weight">Height: </label>
-      <div class="field-contanier">{{ userHeight }}</div>
-      <label for="weight">Height Unit </label>
-      <div class="field-contanier">{{ userHeightUnit }}</div>
-
+      <div class="field-contanier">{{ userHeight$ | async }} {{ userHeightUnit$ | async }}</div>
       <button (click)="previousStep()" class="form-button">Back</button>
       <button (click)="enrollomentAllergens()" class="form-button">Next</button>
     </ng-container>

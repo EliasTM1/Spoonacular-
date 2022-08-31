@@ -6,13 +6,16 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Intolerances, UserPrvt } from '../../interfaces/user.interface';
+
 import { MOCK_INTOLERANCES } from '../../mocks/intolerances';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { IngredientsService } from 'src/app/ingredients.service';
-import { Ingredient } from 'src/app/interfaces/recipes.interfaces';
+import { Ingredient } from 'src/app/interfaces/api/recipes.interfaces';
 import { Store } from '@ngrx/store';
-import { FormPageActions } from 'src/app/ngrx';
+import { FormSelectors, FormStepActions } from './state/index';
+import { UserPrvt } from './state/form.reducer'
+import { Observable } from 'rxjs';
+// import { selectUsrAge, selectUsrHeight, selectUsrHeightU, selectUsrName, selectUsrWeight, selectUsrWei0ghtUnits } from './state/form.reducer';
 
 @Component({
   selector: 'app-form',
@@ -20,12 +23,6 @@ import { FormPageActions } from 'src/app/ngrx';
   styleUrls: ['./form.component.css'],
 })
 export class FormComponent implements OnInit {
-  constructor(
-    private fb: FormBuilder,
-    private ingredientService: IngredientsService,
-    private store: Store,
-
-  ) {}
 
   //  * FORM STEPS
   currentStep: string[] = [];
@@ -34,12 +31,12 @@ export class FormComponent implements OnInit {
   userIntoleranceStep: string = 'userIntoleranceStep';
   addLikes: string = 'addLikes';
   // * USER INSTANCE
-  userName: string | null = '';
-  userAge: string | null = '';
-  userWeight: string | null = '';
-  userWeightUnit: string | null = '';
-  userHeight: string | null = '';
-  userHeightUnit: string | null = '';
+  userName$: Observable<string> = this.store.select(FormSelectors.name);
+  userAge$: Observable<number> = this.store.select(FormSelectors.age);
+  userWeight$: Observable<number> = this.store.select(FormSelectors.weight);
+  userWeightUnit$: Observable<string> = this.store.select(FormSelectors.weightUnits);
+  userHeight$: Observable<number> = this.store.select(FormSelectors.height);
+  userHeightUnit$ : Observable<string> = this.store.select(FormSelectors.heightU);
   userIntoleranceList: number[] = [];
   staticIngredients: Ingredient[] = [];
   MOCK_INTOLERANCES = MOCK_INTOLERANCES;
@@ -50,6 +47,29 @@ export class FormComponent implements OnInit {
   matches: any[] = [];
   userLikes: any = [];
   userDislikes: any = [];
+  testUsrNgrx!: UserPrvt;
+//  Michael Koch implement this before
+  // * With store state
+  // userName: Observable<string>;
+  // userAge: Observable<number>;
+  // userWeight: Observable<number>;
+  // userWeightUnit: Observable<string>;
+  // userHeight: Observable<number>;
+  // userHeightUnit: Observable<string>;
+
+  constructor(
+    private fb: FormBuilder,
+    private ingredientService: IngredientsService,
+    private store: Store
+  ) {
+    // this.userName = store.select(selectUsrName => selectUsrNameReadrrdtr);
+    // this.userAge = store.select(selectUsrAge);
+    // this.userWeight = store.select(selectUsrWeight);
+    // this.userWeightUnit = store.select(selectUsrWeightUnits);
+    // this.userHeight = store.select(selectUsrHeight);
+    // this.userHeightUnit = store.select(selectUsrHeightU);
+
+  }
 
   personalForm = this.fb.group({
     //  ? Peronsal
@@ -68,7 +88,8 @@ export class FormComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.store.dispatch(FormPageActions.init());
+    this.store.dispatch(FormStepActions.enter());
+    console.warn('after entering app');
     this.currentStep.push(this.startEnrollmentStep);
     // this.personalForm.valueChanges.forEach((value) => {});
     this.personalForm.valueChanges.pipe(
@@ -89,8 +110,10 @@ export class FormComponent implements OnInit {
 
   submitPersonal(e: any) {
     e.preventDefault();
-    this.mapUserData();
+
     this.currentStep.unshift(this.confirmInfoStep);
+    let user = this.mapUserData();
+    this.store.dispatch(FormStepActions.submitPersonal({ userInfo: user }));
   }
 
   enrollomentAllergens() {
@@ -116,12 +139,23 @@ export class FormComponent implements OnInit {
   }
 
   mapUserData() {
-    this.userName = this.personalForm.controls.firstName.value;
-    this.userAge = this.personalForm.controls.age.value;
-    this.userWeight = this.personalForm.controls.weigth.value;
-    this.userWeightUnit = this.personalForm.controls.weightUnit.value;
-    this.userHeight = this.personalForm.controls.height.value;
-    this.userHeightUnit = this.personalForm.controls.heightUnit.value;
+    // this.userName = this.personalForm.controls.firstName.value;
+    // this.userAge = this.personalForm.controls.age.value;
+    // this.userWeight = this.personalForm.controls.weigth.value;
+    // this.userWeightUnit = this.personalForm.controls.weightUnit.value;
+    // this.userHeight = this.personalForm.controls.height.value;
+    // this.userHeightUnit = this.personalForm.controls.heightUnit.value;
+
+    return {
+      age: Number(this.personalForm.controls.age.value),
+      height: Number(this.personalForm.controls.height.value),
+      heightU: this.personalForm.controls.heightUnit.value!,
+      name: this.personalForm.controls.firstName.value!,
+      enrollStarted: true,
+      weight: Number(this.personalForm.controls.weigth.value),
+      weightUnits: this.personalForm.controls.weightUnit.value!,
+      finishedEnroll: false,
+    };
   }
 
   changeStatus(index: any) {
@@ -166,7 +200,10 @@ export class FormComponent implements OnInit {
     if (searchBoxState.length > 2) {
       for (let i = 0; i < this.currentSuggestions.length; i++) {
         const { ingredient } = this.currentSuggestions[i];
-        if ( ingredient.match(regex) && !this.isObjPresent(this.currentSuggestions[i])) {
+        if (
+          ingredient.match(regex) &&
+          !this.isObjPresent(this.currentSuggestions[i])
+        ) {
           this.matches.push(this.currentSuggestions[i]);
         }
       }
@@ -176,8 +213,8 @@ export class FormComponent implements OnInit {
 
   addLike(e: Ingredient) {
     let newLike = {
-      ingrediente: "",
-    }
+      ingrediente: '',
+    };
     this.userLikes.push(e.ingredient);
   }
 
@@ -191,6 +228,5 @@ export class FormComponent implements OnInit {
     return valid;
   }
 
-  clickedSuggestion(suggestionSelected: any) {
-  }
+  clickedSuggestion(suggestionSelected: any) {}
 }

@@ -1,0 +1,29 @@
+<div [ngSwitch]="pillMode">
+  <div *ngSwitchCase="'include'">
+    <div class="pill-contr">
+      <div
+        *ngFor="let cuisine of staticCuisines"
+        (click)="addCategory(cuisine)"
+        [ngClass]="{ 'pill': !cuisine.isActive, 'pill-active': cuisine.isActive }"
+      >
+        <span>{{ cuisine.cuisineType }}</span>
+        <i *ngIf="!cuisine.isActive" class="fa-solid fa-plus"></i>
+        <i *ngIf="cuisine.isActive" class="fa-solid fa-check active"></i>
+      </div>
+    </div>
+  </div>
+  <div *ngSwitchCase="'exclude'">
+    <div class="pill-contr">
+      <div
+        *ngFor="let cuisine of staticCuisines"
+        (click)="addCategory(cuisine)"
+        [ngClass]="{ 'pill': !cuisine.isActive, 'pill-active-exclude': cuisine.isActive }"
+      >
+        <span>{{ cuisine.cuisineType }}</span>
+        <i *ngIf="!cuisine.isActive" class="fa-solid fa-plus"></i>
+        <i *ngIf="cuisine.isActive" class="fa-solid fa-circle-xmark"></i>
+      </div>
+    </div>
+  </div>
+</div>
+

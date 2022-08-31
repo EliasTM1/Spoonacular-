@@ -22,7 +22,7 @@ export interface Intolerances {
   treeNut: string;
   wheat: string;
 }
-
+// * Consider this interface to have it's own file
 export interface UserModel {
 cheap: boolean ;
 cookTime: number ;
@@ -40,4 +40,14 @@ title: string ;
 vegan: boolean ;
 vegetarian: boolean ;
 veryHealthy: boolean ;
+}
+
+
+export interface CardIcons {
+  cheap: boolean;
+  dairyFree: boolean;
+  gluttenFree: boolean;
+  healthy: boolean
+  vegan: boolean
+  vegetarian: boolean
 }

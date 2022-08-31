@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { MAIN_URL } from './http.constants';
 import {SEARCH_TYPE} from './http.constants'
-import {RandomRecipe} from '../interfaces/random.interface'
+import {RandomRecipe} from '../interfaces/api/random.interface'
 import { IRandomRecipes } from './spoonacular.service.interface';
 @Injectable({
   providedIn: 'root',
