@@ -1,0 +1,28 @@
+<div [ngSwitch]="searchMode">
+  <div class="simple-search-contr" [ngClass]="{ 'empty-search': isSearchEmpty }">
+    <div *ngSwitchCase="'simple'">
+      form
+      <label for="input-search">Search For anything</label>
+      <input id="input-search" name="input-search" type="text" />
+      <button>Submit</button>
+    </div>
+  </div>
+  <div *ngSwitchCase="'advanced'">
+    <form class="advanced-search-contr">
+      <h2>Search</h2>
+      <input id="input-search" name="input-search" type="text" placeholder="Human sentence"/>
+      <h2>Include</h2>
+      <input id="input-search" name="input-search" type="text" placeholder="Ingredient"/>
+      <h2>Exclude</h2>
+      <input id="input-search" name="input-search" type="text" placeholder=" Ingredient"/>
+      <h2>Ingredient List Checkbox</h2>
+      <app-pill [staticCuisines]="staticExcludeCuisines" [pillMode]="'exclude'"></app-pill>
+      <h2>Include Cuisines</h2>
+      <app-pill [staticCuisines]="staticCuisines" [pillMode]="'include'"></app-pill>
+      <h2>Meal Types</h2>
+      <app-pill [staticCuisines]="staticMealTypes" [pillMode]="'include'"></app-pill>
+      <!-- <h2>Diets</h2> -->
+      <button>Submit</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+<div class="full-page-contr" [ngSwitch]="formDisplayMode">
+  <div class="recipe-page-contr">
+    <div class="recipe-details-contr" *ngSwitchCase="generalDetails">
+      <div class="flx-contr">
+        <div class="img-itm">
+          <img
+            src="../../../assets/img/Chau_Sunday_Gravy.gif"
+            alt=""
+            class="contr"
+          />
+        </div>
+        <div class="recipe-details-feature">
+          <ul>
+            <li>someLegend <img src="../../../assets/icons/001-low-price.png" alt=""></li>
+          </ul>
+        </div>
+      </div>
+      <div class="recipe-descr">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem placeat ducimus tenetur molestiae sequi minus reprehenderit quo voluptatum hic aspernatur dicta, tempora impedit. Eum dicta cupiditate repellendus hic, deserunt cum explicabo in sit accusamus distinctio. Harum ipsam aut dolorem quas ratione culpa vero reiciendis voluptate quia, ab perspiciatis quidem totam. Asperiores qui a voluptatibus impedit corporis recusandae dolores nemo, officiis animi, maiores accusantium autem corrupti deserunt hic atque delectus odit ducimus commodi eveniet beatae non quidem soluta! Nemo, assumenda. Et a, ullam accusamus deleniti nihil delectus fugit doloribus dolore, repellendus inventore fuga, corporis porro quasi asperiores dicta. Est qui voluptatibus nostrum nemo! Eum aliquid maxime provident maiores deleniti ducimus minima deserunt quos veritatis enim repellat atque vitae quod corrupti, est odio illum aperiam explicabo dolor. Iste ratione dolorem explicabo itaque ipsa saepe suscipit deleniti reprehenderit quaerat vero, alias, nemo error, consequatur velit facilis in illum a eveniet repellendus!
+      </div>
+    </div>
+
+    <div class="recipe-details-contr" *ngSwitchCase="priceBreakdownGraph">
+      <div class="graph-contr">
+        <app-pie-chart></app-pie-chart>
+      </div>
+    </div>
+
+    <div class="recipe-details-contr" *ngSwitchCase="nutritionInfoGraph">
+      "setNutritionalForm"
+      <div class="bars-graph-contr">
+        <app-bar-chart></app-bar-chart>
+      </div>
+    </div>
+    <div class="btn-contr">
+      <button (click)="setNutritionalForm()">Nutritional Information</button>
+      <button (click)="setPriceBreakdownForm()">Price Breakdown</button>
+      <button (click)="setGenDetailForm()">Price Breakdown</button>
+      <button (click)="closeModal()" [routerLink]="'details'">Close X</button>
+    </div>
+  </div>
+</div>

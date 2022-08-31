@@ -1,0 +1,10 @@
+<div class="icon-container">
+  <div *ngFor="let recipeFeature of groupedRecipeFeatures">
+    <div *ngIf="recipeFeature.isIconPresent">
+      <!-- {{ recipeFeatures.src }} -->
+      <img class="dynamic-icon" [src]="recipeFeature.src" alt="" />
+    </div>
+
+  </div>
+</div>
+

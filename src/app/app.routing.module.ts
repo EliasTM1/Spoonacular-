@@ -1,31 +1,26 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FormComponent } from './components/form/form.component';
-import { OptionSelectionComponent } from './components/option-selection/option-selection.component';
-import { ProfileEditorComponent } from './components/profile-editor/profile-editor.component';
-import { ToggleSettingsComponent } from './components/toggle-settings/toggle-settings.component';
+import { StartStaticComponent } from './pages/start-static/start-static.component';
+
 
 const routes: Routes = [
+  // {
+  //   path: '',
+  //   component: StartStaticComponent,
+  // },
   {
+    // path: 'enroll',
     path: '',
-    component: FormComponent,
+    loadChildren: () => import('./pages/form/form.module').then(m => m.FormModule)
   },
   {
-    path: 'options',
-    component: OptionSelectionComponent,
-  },
-  {
-    path: 'settings',
-    component: ProfileEditorComponent,
-  },
-  {
-    path: 'toglleSettings',
-    component: ToggleSettingsComponent,
+    path: 'dashboard',
+    loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule)
   },
   {
     path: '**',
     redirectTo: '',
-  },
+    pathMatch: 'full'  },
 ];
 
 @NgModule({

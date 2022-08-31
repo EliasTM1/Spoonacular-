@@ -1,0 +1,16 @@
+<app-legends></app-legends>
+<!-- <div *ngIf="!isLoading; else loading">
+  <app-card [responseRandom]="recipes" [cardUseCase]="'random'"></app-card>
+</div> -->
+<div class="card-grid-contr">
+  <div *ngFor="let randomRecipes of recipes" >
+    <app-card-demo [randomRecipe]="randomRecipes"></app-card-demo>
+  </div>
+</div>
+<router-outlet></router-outlet>
+
+
+
+<ng-template #loading>
+  <app-loading></app-loading>
+</ng-template>
