@@ -12,6 +12,7 @@ import { AdvancedSearchComponent } from '../advanced-search/advanced-search.comp
 import { SavedTableComponent } from '../saved-table/saved-table.component';
 import { RecipeDetailsComponent } from '../recipe-details/recipe-details.component';
 import { ChartsModule } from 'src/app/charts/charts.module';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { ChartsModule } from 'src/app/charts/charts.module';
     DashboardRoutingModule,
     ChartsModule,
     SharedModule,
+    HttpClientModule
   ],
   exports: [
     DashboardComponent

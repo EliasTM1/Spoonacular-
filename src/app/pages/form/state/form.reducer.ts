@@ -1,61 +1,39 @@
-import { createReducer, on } from '@ngrx/store';
+import { Action, createReducer, on } from '@ngrx/store';
 import { FormStepActions } from './index';
 
 export const formStateKey = 'userState';
 
 export interface UserPrvt {
   age: number;
+  personalConfimerd: boolean;
   height: number;
   heightU: string;
   name: string;
   enrollStarted: boolean;
+  enrollFinished: boolean;
   weight: number;
   weightUnits: string;
-}
-
-export interface UserIntolerances {
-  dairy: boolean;
-  egg: boolean;
-  gluten: boolean;
-  grain: boolean;
-  peanut: boolean;
-  seafood: boolean;
-  sesame: boolean;
-  shellfish: boolean;
-  soy: boolean;
-  sulfite: boolean;
-  treeNut: boolean;
-  wheat: boolean;
+  usrIntolerances: string[];
+  completeEnrollSteps: string;
 }
 
 export const initialState: UserPrvt = {
   age: 0,
+  personalConfimerd: false,
   height: 0,
   heightU: '',
   name: '',
   enrollStarted: false,
+  enrollFinished: false,
   weight: 0,
   weightUnits: '',
+  usrIntolerances: [],
+  completeEnrollSteps: '',
 };
 
-export const intialStateIntolerances: UserIntolerances = {
-  dairy: false,
-  egg: false,
-  gluten: false,
-  grain: false,
-  peanut: false,
-  seafood: false,
-  sesame: false,
-  shellfish: false,
-  soy: false,
-  sulfite: false,
-  treeNut: false,
-  wheat: false,
-};
-
-export const reducer = createReducer(
+export const userReducer = createReducer(
   initialState,
-  on(FormStepActions.enter, FormStepActions.actionExample, (state) => {
+  on(FormStepActions.enter, (state) => {
     return {
       ...state,
     };
@@ -67,24 +45,35 @@ export const reducer = createReducer(
       age: action.userInfo.age,
       height: action.userInfo.height,
       heightU: action.userInfo.heightU,
-      startedEnroll: true,
+      enrollStarted: !action.userInfo.enrollStarted,
       weight: action.userInfo.weight,
       weightUnits: action.userInfo.weightUnits,
     };
   }),
-
+  on(FormStepActions.confirmPersonal, (state, action) => {
+    return {
+      ...state,
+      personalConfimerd: action.confirmedAction,
+    };
+  }),
+  on(FormStepActions.addIntolerances, (state, action) => {
+    let intolerances = [...state.usrIntolerances];
+    let newIntoleranceState = intolerances.includes(action.intolerance)
+      ? [...state.usrIntolerances].filter((e) => e != action.intolerance)
+      : [...state.usrIntolerances, action.intolerance];
+    return {
+      ...state,
+      usrIntolerances: newIntoleranceState,
+    };
+  }),
+  on(FormStepActions.changeFormStep, (state, action) => {
+    return {
+      ...state,
+      completeEnrollSteps: action.step,
+    };
+  })
 );
 
-export const intoleanceReducer = createReducer(
-  intialStateIntolerances,
-
-)
-
-
-// * Selectors
-// export const selectUsrName = (state: UserPrvt) => state.name;
-// export const selectUsrAge = (state: UserPrvt) => state.age;
-// export const selectUsrHeight = (state: UserPrvt) => state.height;
-// export const selectUsrHeightU = (state: UserPrvt) => state.heightU;
-// export const selectUsrWeight = (state: UserPrvt) => state.weight;
-// export const selectUsrWeightUnits = (state: UserPrvt) => state.weightUnits;
+export function reducer(state: UserPrvt | undefined, action: Action) {
+  return userReducer(state, action);
+}

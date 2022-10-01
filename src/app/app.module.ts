@@ -9,7 +9,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing.module';
 import { environment } from '../environments/environment';
-import { reducer } from './pages/form/state/index';
 import { StartStaticComponent } from './pages/start-static/start-static.component';
 
 @NgModule({
@@ -23,7 +22,6 @@ import { StartStaticComponent } from './pages/start-static/start-static.componen
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode
-      autoPause: true, // Pauses recording actions and state changes when the extension window is not open
     }),
   ],
   providers: [...environment.providers],

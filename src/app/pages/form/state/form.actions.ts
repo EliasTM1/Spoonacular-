@@ -1,32 +1,45 @@
-import { createAction, props } from "@ngrx/store";
-import { UserPrvt } from "./form.reducer";
+import { createAction, props } from '@ngrx/store';
+import { UserPrvt } from './form.reducer';
 
+export enum FormActionsNames {
+  Init = '[Form Page] Enter',
+  UsrSubmit = '[Form Page] User data',
+  UsrConfirm = '[Form Page] User confirmed',
+  UsrIntolerances = '[Form Page] Intolerances confirmed',
+  UsrLikes = '[Form Page] Like ing confirmed',
+  UsrDislikes = '[Form Page] Dislike ing confirmed',
+  classActive = '[Form Page] Class Active',
+  formStepActive = '[Form Page] Next form step',
+}
 
-export const enter = createAction('[Form Page] Enter');
-export const actionExample = createAction('[Form Page] Example to showcase multiple actions for one reducer');
-
+export const enter = createAction(FormActionsNames.Init);
 
 export const submitPersonal = createAction(
-  '[Form Page] User data',
-  props<{userInfo : UserPrvt}>()
-  );
+  FormActionsNames.UsrSubmit,
+  props<{ userInfo: UserPrvt }>()
+);
 
 export const confirmPersonal = createAction(
-  '[Form Page] User confirmed',
-  props<{id : string}>()
-  );
+  FormActionsNames.UsrConfirm,
+  props<{ confirmedAction: boolean }>()
+);
 
 export const addIntolerances = createAction(
-  '[Form Page] Intolerances confirmed',
-  props<{id : string}>()
-  );
+  FormActionsNames.UsrIntolerances,
+  props<{ intolerance: string }>()
+);
 
-export const addLikes = createAction(
-  '[Form Page] Like ing confirmed',
-  props<{id : string}>()
-  );
+export const intolerancesNumber = createAction(
+  FormActionsNames.UsrLikes,
+  props<{ index: number }>()
+);
 
 export const addDisLike = createAction(
-  '[Form Page] Dislike ing confirmed',
-  props<{id : string}>()
-  );
+  FormActionsNames.UsrDislikes,
+  props<{ id: string }>()
+);
+
+export const changeFormStep = createAction(
+  FormActionsNames.formStepActive,
+  props<{ step: string }>()
+);

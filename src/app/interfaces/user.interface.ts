@@ -47,7 +47,7 @@ export interface CardIcons {
   cheap: boolean;
   dairyFree: boolean;
   gluttenFree: boolean;
-  healthy: boolean
+  veryHealthy: boolean
   vegan: boolean
   vegetarian: boolean
 }

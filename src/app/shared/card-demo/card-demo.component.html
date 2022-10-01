@@ -1,22 +1,26 @@
     <div  class="card-contnr">
       <div class="card-body">
         <img class="card-img" [src]="image" alt="" />
-        <div class="info-section"></div>
-        <!-- <div class="info-section" *ngFor="let likes of newRandomMap.groupLikesforIcons"></div> -->
-        <!-- <app-card-icons [recipeFeatures]="receta"></app-card-icons> -->
-        <app-card-icons [recipeFeatures]="groupedLikes"></app-card-icons>
+        <div class="info-section">
+            <app-card-icons [recipeFeatures]="groupedLikes"></app-card-icons>
+          <h3 class="card-title">{{title}}</h3>
+        </div>
         <div class="card-desc">
-          <span class="card-title">{{title}}</span>
+          <span>Cook Time: {{cookTime}}</span>
+          <br>
+          <span>Ready in: {{readyInMinutes}} minutes</span>
+          <br>
+          <span>Prep time: {{prepTime}} minutes</span>
+
 
         </div>
         <button routerLink="details/{{id}}" (click)="getRecipeDetails()">Get Full Recipe</button>
+        <!-- <button routerLink="details" (click)="getRecipeDetails()">Get Full Recipe</button> -->
       </div>
     </div>
 
 
-<!-- <ng-template #details>
-  <app-card-details ></app-card-details>537306
-</ng-template> -->
+
 
 <ng-template #loading>
   <app-loading></app-loading>

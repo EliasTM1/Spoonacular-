@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -8,14 +7,15 @@ import {
 } from '@angular/forms';
 
 import { MOCK_INTOLERANCES } from '../../mocks/intolerances';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, first, map } from 'rxjs/operators';
 import { IngredientsService } from 'src/app/ingredients.service';
-import { Ingredient } from 'src/app/interfaces/api/recipes.interfaces';
-import { Store } from '@ngrx/store';
+import { Ingredient } from 'src/app/interfaces/api/recipesApi.interfaces';
+import {  Store } from '@ngrx/store';
 import { FormSelectors, FormStepActions } from './state/index';
-import { UserPrvt } from './state/form.reducer'
+import { UserPrvt } from './state/form.reducer';
 import { Observable } from 'rxjs';
-// import { selectUsrAge, selectUsrHeight, selectUsrHeightU, selectUsrName, selectUsrWeight, selectUsrWei0ghtUnits } from './state/form.reducer';
+import {AvailFormSteps} from './constants'
+
 
 @Component({
   selector: 'app-form',
@@ -23,53 +23,37 @@ import { Observable } from 'rxjs';
   styleUrls: ['./form.component.css'],
 })
 export class FormComponent implements OnInit {
-
-  //  * FORM STEPS
-  currentStep: string[] = [];
-  startEnrollmentStep: string = 'start';
-  confirmInfoStep: string = 'confirmInfoStep';
-  userIntoleranceStep: string = 'userIntoleranceStep';
-  addLikes: string = 'addLikes';
   // * USER INSTANCE
+  currentStep$: Observable<string> = this.store.select(FormSelectors.currentStep);
   userName$: Observable<string> = this.store.select(FormSelectors.name);
   userAge$: Observable<number> = this.store.select(FormSelectors.age);
   userWeight$: Observable<number> = this.store.select(FormSelectors.weight);
   userWeightUnit$: Observable<string> = this.store.select(FormSelectors.weightUnits);
   userHeight$: Observable<number> = this.store.select(FormSelectors.height);
-  userHeightUnit$ : Observable<string> = this.store.select(FormSelectors.heightU);
+  userHeightUnit$: Observable<string> = this.store.select(FormSelectors.heightU);
+  userIntolerances$: Observable<string[]> = this.store.select(FormSelectors.intolerances);
   userIntoleranceList: number[] = [];
-  staticIngredients: Ingredient[] = [];
+
   MOCK_INTOLERANCES = MOCK_INTOLERANCES;
+  availableSteps = AvailFormSteps;
+  staticIngredients: Ingredient[] = [];
   selectedIndex!: number;
   activeIndex!: number;
+  stepTemplate : any
   // * SUGGESTIONS
   currentSuggestions: Ingredient[] = [];
   matches: any[] = [];
   userLikes: any = [];
   userDislikes: any = [];
   testUsrNgrx!: UserPrvt;
-//  Michael Koch implement this before
+
   // * With store state
-  // userName: Observable<string>;
-  // userAge: Observable<number>;
-  // userWeight: Observable<number>;
-  // userWeightUnit: Observable<string>;
-  // userHeight: Observable<number>;
-  // userHeightUnit: Observable<string>;
 
   constructor(
     private fb: FormBuilder,
     private ingredientService: IngredientsService,
     private store: Store
-  ) {
-    // this.userName = store.select(selectUsrName => selectUsrNameReadrrdtr);
-    // this.userAge = store.select(selectUsrAge);
-    // this.userWeight = store.select(selectUsrWeight);
-    // this.userWeightUnit = store.select(selectUsrWeightUnits);
-    // this.userHeight = store.select(selectUsrHeight);
-    // this.userHeightUnit = store.select(selectUsrHeightU);
-
-  }
+  ) {}
 
   personalForm = this.fb.group({
     //  ? Peronsal
@@ -88,10 +72,11 @@ export class FormComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    console.warn(this.stepTemplate)
     this.store.dispatch(FormStepActions.enter());
-    console.warn('after entering app');
-    this.currentStep.push(this.startEnrollmentStep);
-    // this.personalForm.valueChanges.forEach((value) => {});
+    this.store.dispatch(
+      FormStepActions.changeFormStep({ step: this.availableSteps.startEnrollmentStep })
+    );
     this.personalForm.valueChanges.pipe(
       debounceTime(400),
       distinctUntilChanged(),
@@ -99,37 +84,49 @@ export class FormComponent implements OnInit {
         terms;
       })
     );
-    // this.currentSuggestions = this.ingredientService.getIngredients();
   }
 
   addPreference() {}
   //  * FORM STEPS
   previousStep() {
-    this.currentStep.shift();
+    // this.currentStep.shift();
   }
 
   submitPersonal(e: any) {
     e.preventDefault();
-
-    this.currentStep.unshift(this.confirmInfoStep);
+    this.store.dispatch(
+      FormStepActions.changeFormStep({ step: this.availableSteps.confirmInfoStep })
+    );
     let user = this.mapUserData();
     this.store.dispatch(FormStepActions.submitPersonal({ userInfo: user }));
   }
 
   enrollomentAllergens() {
-    this.currentStep.unshift(this.userIntoleranceStep);
+    this.store.dispatch(
+      FormStepActions.confirmPersonal({ confirmedAction: true })
+    );
+    this.store.dispatch(
+      FormStepActions.changeFormStep({ step: this.availableSteps.userIntoleranceStep })
+    );
+
   }
 
   addUserLikes() {
-    this.currentStep.unshift(this.addLikes);
+    this.store.dispatch(
+      FormStepActions.changeFormStep({ step: this.availableSteps.addLikes })
+    );
   }
 
   goToDashboard() {
-    this.currentStep.unshift(this.addLikes);
+    // this.currentStep.unshift(this.addLikes);
   }
 
   addPreferences() {
     // this.currentStep = this.addLikes;
+  }
+
+  addUserIntolerances() {
+    // this.store.dispatch(FormStepActions.addIntolerances({intolerance: this.userIntolerance }))
   }
 
   //  * ENDS FORM STEPS
@@ -139,22 +136,18 @@ export class FormComponent implements OnInit {
   }
 
   mapUserData() {
-    // this.userName = this.personalForm.controls.firstName.value;
-    // this.userAge = this.personalForm.controls.age.value;
-    // this.userWeight = this.personalForm.controls.weigth.value;
-    // this.userWeightUnit = this.personalForm.controls.weightUnit.value;
-    // this.userHeight = this.personalForm.controls.height.value;
-    // this.userHeightUnit = this.personalForm.controls.heightUnit.value;
-
     return {
       age: Number(this.personalForm.controls.age.value),
+      personalConfimerd: false,
       height: Number(this.personalForm.controls.height.value),
       heightU: this.personalForm.controls.heightUnit.value!,
       name: this.personalForm.controls.firstName.value!,
       enrollStarted: true,
+      enrollFinished: false,
       weight: Number(this.personalForm.controls.weigth.value),
       weightUnits: this.personalForm.controls.weightUnit.value!,
-      finishedEnroll: false,
+      usrIntolerances: [],
+      completeEnrollSteps: '',
     };
   }
 
@@ -170,10 +163,34 @@ export class FormComponent implements OnInit {
     });
   }
 
-  setActiveIndex(index: any) {
+  addSelectionClass(index: number) {
+    console.log(this.userIntoleranceList);
+    if (this.userIntoleranceList.includes(index))
+      this.userIntoleranceList = this.userIntoleranceList.filter(
+        (e) => e !== index
+      );
+    console.log(this.userIntoleranceList, 'AFTER');
+  }
+
+  setActiveIndex(index: any, intolerance: string) {
     const mynumero = Number(index);
-    this.userIntoleranceList.push(mynumero);
+    let intoleranceKey = intolerance
+      .toLowerCase()
+      .replace('-', '')
+      .replace(/\s/g, '');
+    if (!this.userIntoleranceList.includes(mynumero)) {
+      this.userIntoleranceList.push(mynumero);
+    } else {
+      this.userIntoleranceList = this.userIntoleranceList.filter(
+        (numero) => numero !== mynumero
+      );
+    }
     this.activeIndex = index;
+    let intoleranceArray = [];
+    intoleranceArray.push(intoleranceKey);
+    this.store.dispatch(
+      FormStepActions.addIntolerances({ intolerance: intoleranceKey })
+    );
   }
 
   getActiveClass(i: any) {

@@ -1,25 +1,46 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, of } from 'rxjs';
-import { IRandomRecipes } from './spoonacular.service.interface';
+import { of } from 'rxjs';
 import { randomRecipesMocks } from 'mocks/tsMocks/randomRecipes.mocks';
+import { recipeTasteMocks } from 'mocks/tsMocks/recipeTaste.mocks';
+import { recipeEquipmentMocks } from 'mocks/tsMocks/recipeEquipment.mocks';
+import { priceBreakdownMocks } from 'mocks/tsMocks/recipePriceBreakdown.mocks';
+import { RecipeNutritionMocks } from 'mocks/tsMocks/recipeNutrition.mocks';
+import { RecipesIngredientsMocks } from 'mocks/tsMocks/recipeIngredients.mocks';
 
-
-// /Users/hm1/Documents/AAAjobHunt/angularSandbox/reactive/mocks/data/randomRecipes.json
 @Injectable({
   providedIn: 'root',
 })
-export class SpoonacularServiceMock implements IRandomRecipes {
-  public randomRecipes = randomRecipesMocks
-  // * http
-  public readonly _randomRecipes = new BehaviorSubject<Array<any>>([]);
-  public readonly _searchByIngredient = new BehaviorSubject<Array<any>>([]);
-  public readonly _recipeDetails = new BehaviorSubject<Array<any>>([]);
-  // * UI controls
-  public readonly _isLoading = new BehaviorSubject<Array<boolean>>([]);
-  public readonly _error = new BehaviorSubject<Array<any>>([]);
+export class SpoonacularServiceMock {
+  public randomRecipes = randomRecipesMocks;
+  public recipeTaste = recipeTasteMocks;
+  public recipeEquipment = recipeEquipmentMocks;
+  public getRecipeNutrition = RecipeNutritionMocks;
+  public priceBreakdown = priceBreakdownMocks;
+  public getRecipesIngredients = RecipesIngredientsMocks;
 
   requestRandom() {
     return of(this.randomRecipes);
   }
+
+  requestRecipeTaste() {
+    return of(this.recipeTaste);
+  }
+
+  requestRecipeIngredients() {
+    return of(this.getRecipesIngredients);
+  }
+
+  requestPriceBreakdown() {
+    return of(this.priceBreakdown);
+  }
+
+  requestRecipeEquipment() {
+    return of(this.recipeEquipment);
+  }
+
+  requestRecipeNutrition() {
+    return of(this.getRecipeNutrition);
+  }
+
 
 }

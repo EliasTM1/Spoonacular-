@@ -25,6 +25,6 @@ export const MOCK_INTOLERANCES = [
   { value: 'shellfish', elemClasses: '' },
   { value: 'soy', elemClasses: '' },
   { value: 'sulfite', elemClasses: '' },
-  { value: 'treeNut', elemClasses: '' },
+  { value: 'tree Nut', elemClasses: '' },
   { value: 'wheat', elemClasses: '' },
 ];

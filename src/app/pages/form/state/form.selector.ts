@@ -33,6 +33,16 @@ export const weightUnits = createSelector(
   (usrState) => usrState.weightUnits
 );
 
+export const intolerances = createSelector(
+  usrState,
+  (usrState) => usrState.usrIntolerances
+);
+
+export const currentStep = createSelector(
+  usrState,
+  (usrState) => usrState.completeEnrollSteps
+);
+
 // ? Create complex calculations and/or recycle
 // * ----------------------------------------------------------------------------
 // * To return a complex calculation from the selectors created above

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ExtendedIngredient, newRandomRecipe, RadomRecipes, RandomRecipe } from 'src/app/interfaces/api/random.interface';
+import {
+  RandomRecipe,
+} from 'src/app/interfaces/api/randomApi.interface';
+import { SpoonacularService } from 'src/app/services/spoonacular.service';
 import { SpoonacularServiceMock } from 'src/app/services/spoonacular.mock.service';
 
 @Component({
@@ -8,80 +11,39 @@ import { SpoonacularServiceMock } from 'src/app/services/spoonacular.mock.servic
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
-  constructor(private spoonMockApi: SpoonacularServiceMock) {}
+  constructor(
+    private spoonApi: SpoonacularService,
+    private spoonMockApi: SpoonacularServiceMock
+  ) {}
 
-  // public randomRecipes: RandomRecipe[] | undefined;
-  public recipes: any[] = [];
-  public isLoading: boolean = false;
-  public randomRecipes : newRandomRecipe[] = []
+  public isLoading: boolean = true;
+  public randomRecipes!: RandomRecipe;
+  public recipes: any;
 
   ngOnInit(): void {
     this.getRecipes();
-    console.warn(this.recipes);
   }
 
-  getRecipes() {
+    getRecipes() {
+    // * Real endpoint
+    // this.spoonApi
+    //   .getRandom()
+    //   .subscribe((randomRecipes: SingleRandomRecipe) => {
+    //     this.recipes = randomRecipes.recipes[0];
+    //     this.randomRecipes = this.recipes
+    //     this.isLoading = false;
+    //     console.log(this.recipes, "home component")
+    //   });
+    // * Real endpoint
+
     let random = this.spoonMockApi.requestRandom().subscribe(
       (randomRecipes) => {
-        console.log({ randomRecipes});
         this.recipes = randomRecipes.recipes;
-        console.log( this.recipes);
+        this.randomRecipes = this.recipes[0];
       },
       (error) => {
-        console.log(error);
       }
     );
-    this.createRandomRecipe();
     return random;
-  }
-
-  createRandomRecipe() {
-
-    const mappedRandomRecipe = this.recipes.map((recipe:any)  => {
-      return {
-        id: recipe.id,
-        title: recipe.title,
-        susteinable: recipe.sustainable,
-        vegetarian: recipe.vegetarian,
-        vegan: recipe.vegan,
-        glutenFree: recipe.glutenFree,
-        dairyFree: recipe.dairyFree,
-        veryHealthy: recipe.veryHealthy,
-        cheap: recipe.cheap,
-        prepTime: recipe.preparationMinutes,
-        cookTime: recipe.cookingMinutes,
-        credits: recipe.sourceName,
-        creditsUrl: recipe.sourceUrl,
-        image: recipe.image,
-        readyInMinutes: recipe.readyInMinutes,
-        ingredients: this.mapIngredients(recipe.extendedIngredients),
-      }
-    })
-    console.warn(mappedRandomRecipe);
-
-    this.randomRecipes = mappedRandomRecipe;
-
-  }
-
-  mapIngredients(ingredients: ExtendedIngredient[]) {
-    console.log('exec');
-
-    const mappedIngredientArr: any = [];
-    ingredients.forEach((ingredient) => {
-      const mappedIngredient = {
-        id: ingredient.id,
-        amount: ingredient.amount,
-        name: ingredient.name,
-        unit: ingredient.unit,
-        nameClean: ingredient.nameClean,
-        original: ingredient.original,
-        measures: {
-          metric: ingredient.measures.metric,
-          us: ingredient.measures.us,
-        },
-      };
-      mappedIngredientArr.push(mappedIngredient);
-    });
-    return mappedIngredientArr;
   }
 }

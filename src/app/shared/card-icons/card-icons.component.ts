@@ -17,7 +17,7 @@ import {
   styleUrls: ['./card-icons.component.css'],
 })
 export class CardIconsComponent implements  OnInit{
-  // @Input() recipeFeatures!: CardIcons;
+
   @Input() recipeFeatures!: any;
   constructor() {}
 
@@ -34,7 +34,6 @@ export class CardIconsComponent implements  OnInit{
 
   // public icon
   public groupedRecipeFeatures: legendCategoriesIntercafe[] = [];
-
 
   mapLikeIconsTwo() {
     this.groupedRecipeFeatures = [
@@ -63,9 +62,6 @@ export class CardIconsComponent implements  OnInit{
         src: healthySrc,
       },
     ];
-
-    console.warn(this.groupedRecipeFeatures, "afterMapped");
-
     this.groupedRecipeFeatures.filter((e) => {
       return e.isIconPresent != false;
     });

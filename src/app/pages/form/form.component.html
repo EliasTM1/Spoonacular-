@@ -1,7 +1,8 @@
-<section>
+<section [ngSwitch]="currentStep$ | async">
+  {{currentStep$ | async}}
   <form class="form-container" [formGroup]="personalForm">
     <!-- * Start startEnrollmentStep section -->
-    <ng-container *ngIf="currentStep[0] === startEnrollmentStep">
+    <ng-container  *ngSwitchCase="availableSteps.startEnrollmentStep">
       <h1>Personal info</h1>
       <!-- <label for="name">Name: </label> -->
       <div class="field-contanier">
@@ -96,7 +97,7 @@
     <!-- * End startEnrollmentStep section -->
 
     <!-- * Start confirmInfoStep section -->
-    <ng-container *ngIf="currentStep[0] === confirmInfoStep">
+    <ng-container *ngSwitchCase="availableSteps.confirmInfoStep">
       <label for="weight">Name: {{userName$ | async}} </label>
       <div class="field-contanier"></div>
       <label for="weight">Age: </label>
@@ -111,27 +112,8 @@
     <!-- * Ends confirmInfoStep section -->
 
     <!-- * Starts userIntoleranceStep section -->
-    <ng-container
-      *ngIf="currentStep[0] === userIntoleranceStep"
-      [formArrayName="settings"
-      ]
-    >
+    <ng-container *ngSwitchCase="availableSteps.userIntoleranceStep" [formArrayName="settings"]>
       <div class="grid-container">
-        <!--
-        <ng-container *ngFor="let intolerancy of intolerances; let i = index">
-          <button
-            [id]="intolerancy"
-            (change)="addIntolerance($event, i)"
-            [ngClass]="{ activeIntolerance: i === selectedIndex }"
-            (click)="addIntolerance($event, i)"
-            class="form-button"
-            type="button"
-            [value]="intolerancy"
-          >
-            {{ intolerancy | titlecase }}
-          </button>
-        </ng-container> -->
-
         <ng-container
           *ngFor="let intolerancy of MOCK_INTOLERANCES; let i = index"
         >
@@ -141,8 +123,8 @@
             type="button"
             [id]="intolerancy"
             [ngClass]="{ active: userIntoleranceList.includes(i) }"
-            (click)="setActiveIndex(i)"
-             [value]="intolerancy"
+            (click)="setActiveIndex(i, intolerancy.value)"
+            [value]="intolerancy"
           >
             {{ intolerancy.value | titlecase }}
           </button>
@@ -161,8 +143,8 @@
     <!-- * Ends userIntoleranceStep section -->
 
     <!-- * Start addLikes section -->
-    <ng-container *ngIf="currentStep[0] === addLikes">
-      <div></div>
+    <ng-container *ngSwitchCase="availableSteps.addLikes">
+
       <h1>Search for Ingredients</h1>
       <pre>Likes: {{ userLikes.join(" ") }} </pre>
       <pre>Dislikes: {{ userDislikes.join(" ") }} </pre>

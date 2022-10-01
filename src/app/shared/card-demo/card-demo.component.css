@@ -1,13 +1,12 @@
 
-
-
 .card-contnr {
   border: 1px black solid;
   border-radius: 5px;
   /* display: flex; */
   /* flex-direction: column; */
-  width: 80%;
+  width: 40%;
   margin: auto;
+  margin-top: 5rem;
 }
 
 .card-body {
@@ -55,5 +54,3 @@ button {
 button:hover {
   background-color: beige;
 }
-
-
