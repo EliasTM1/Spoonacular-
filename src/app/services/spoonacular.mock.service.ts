@@ -18,6 +18,8 @@ export class SpoonacularServiceMock {
   public priceBreakdown = priceBreakdownMocks;
   public getRecipesIngredients = RecipesIngredientsMocks;
 
+
+
   requestRandom() {
     return of(this.randomRecipes);
   }

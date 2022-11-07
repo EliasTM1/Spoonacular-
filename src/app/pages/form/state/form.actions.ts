@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { UserPrvt } from './form.reducer';
 
-export enum FormActionsNames {
+export enum FormActionNames {
   Init = '[Form Page] Enter',
   UsrSubmit = '[Form Page] User data',
   UsrConfirm = '[Form Page] User confirmed',
@@ -12,34 +12,34 @@ export enum FormActionsNames {
   formStepActive = '[Form Page] Next form step',
 }
 
-export const enter = createAction(FormActionsNames.Init);
+export const enter = createAction(FormActionNames.Init);
 
 export const submitPersonal = createAction(
-  FormActionsNames.UsrSubmit,
+  FormActionNames.UsrSubmit,
   props<{ userInfo: UserPrvt }>()
 );
 
 export const confirmPersonal = createAction(
-  FormActionsNames.UsrConfirm,
+  FormActionNames.UsrConfirm,
   props<{ confirmedAction: boolean }>()
 );
 
 export const addIntolerances = createAction(
-  FormActionsNames.UsrIntolerances,
+  FormActionNames.UsrIntolerances,
   props<{ intolerance: string }>()
 );
 
 export const intolerancesNumber = createAction(
-  FormActionsNames.UsrLikes,
+  FormActionNames.UsrLikes,
   props<{ index: number }>()
 );
 
 export const addDisLike = createAction(
-  FormActionsNames.UsrDislikes,
+  FormActionNames.UsrDislikes,
   props<{ id: string }>()
 );
 
 export const changeFormStep = createAction(
-  FormActionsNames.formStepActive,
+  FormActionNames.formStepActive,
   props<{ step: string }>()
 );

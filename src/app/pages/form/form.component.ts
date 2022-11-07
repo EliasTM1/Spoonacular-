@@ -10,12 +10,11 @@ import { MOCK_INTOLERANCES } from '../../mocks/intolerances';
 import { debounceTime, distinctUntilChanged, first, map } from 'rxjs/operators';
 import { IngredientsService } from 'src/app/ingredients.service';
 import { Ingredient } from 'src/app/interfaces/api/recipesApi.interfaces';
-import {  Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { FormSelectors, FormStepActions } from './state/index';
 import { UserPrvt } from './state/form.reducer';
 import { Observable } from 'rxjs';
-import {AvailFormSteps} from './constants'
-
+import { AvailFormSteps } from './constants';
 
 @Component({
   selector: 'app-form',
@@ -24,14 +23,22 @@ import {AvailFormSteps} from './constants'
 })
 export class FormComponent implements OnInit {
   // * USER INSTANCE
-  currentStep$: Observable<string> = this.store.select(FormSelectors.currentStep);
+  currentStep$: Observable<string> = this.store.select(
+    FormSelectors.currentStep
+  );
   userName$: Observable<string> = this.store.select(FormSelectors.name);
   userAge$: Observable<number> = this.store.select(FormSelectors.age);
   userWeight$: Observable<number> = this.store.select(FormSelectors.weight);
-  userWeightUnit$: Observable<string> = this.store.select(FormSelectors.weightUnits);
+  userWeightUnit$: Observable<string> = this.store.select(
+    FormSelectors.weightUnits
+  );
   userHeight$: Observable<number> = this.store.select(FormSelectors.height);
-  userHeightUnit$: Observable<string> = this.store.select(FormSelectors.heightU);
-  userIntolerances$: Observable<string[]> = this.store.select(FormSelectors.intolerances);
+  userHeightUnit$: Observable<string> = this.store.select(
+    FormSelectors.heightU
+  );
+  userIntolerances$: Observable<string[]> = this.store.select(
+    FormSelectors.intolerances
+  );
   userIntoleranceList: number[] = [];
 
   MOCK_INTOLERANCES = MOCK_INTOLERANCES;
@@ -39,7 +46,7 @@ export class FormComponent implements OnInit {
   staticIngredients: Ingredient[] = [];
   selectedIndex!: number;
   activeIndex!: number;
-  stepTemplate : any
+  stepTemplate: any;
   // * SUGGESTIONS
   currentSuggestions: Ingredient[] = [];
   matches: any[] = [];
@@ -72,10 +79,12 @@ export class FormComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    console.warn(this.stepTemplate)
+    console.warn(this.stepTemplate);
     this.store.dispatch(FormStepActions.enter());
     this.store.dispatch(
-      FormStepActions.changeFormStep({ step: this.availableSteps.startEnrollmentStep })
+      FormStepActions.changeFormStep({
+        step: this.availableSteps.startEnrollmentStep,
+      })
     );
     this.personalForm.valueChanges.pipe(
       debounceTime(400),
@@ -95,7 +104,9 @@ export class FormComponent implements OnInit {
   submitPersonal(e: any) {
     e.preventDefault();
     this.store.dispatch(
-      FormStepActions.changeFormStep({ step: this.availableSteps.confirmInfoStep })
+      FormStepActions.changeFormStep({
+        step: this.availableSteps.confirmInfoStep,
+      })
     );
     let user = this.mapUserData();
     this.store.dispatch(FormStepActions.submitPersonal({ userInfo: user }));
@@ -106,9 +117,10 @@ export class FormComponent implements OnInit {
       FormStepActions.confirmPersonal({ confirmedAction: true })
     );
     this.store.dispatch(
-      FormStepActions.changeFormStep({ step: this.availableSteps.userIntoleranceStep })
+      FormStepActions.changeFormStep({
+        step: this.availableSteps.userIntoleranceStep,
+      })
     );
-
   }
 
   addUserLikes() {

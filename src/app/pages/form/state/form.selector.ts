@@ -1,7 +1,7 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import {formStateKey, UserPrvt} from './form.reducer'
 
-const usrState = createFeatureSelector<UserPrvt>(formStateKey)
+const usrState = createFeatureSelector<UserPrvt>(formStateKey);
 
 export const name = createSelector(
   usrState,

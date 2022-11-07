@@ -10,9 +10,11 @@ import { SearchRecipesComponent } from '../search-recipes/search-recipes.compone
 import { SavedRecipesComponent } from '../saved-recipes/saved-recipes.component';
 import { AdvancedSearchComponent } from '../advanced-search/advanced-search.component'
 import { SavedTableComponent } from '../saved-table/saved-table.component';
-import { RecipeDetailsComponent } from '../recipe-details/recipe-details.component';
-import { ChartsModule } from 'src/app/charts/charts.module';
 import { HttpClientModule } from '@angular/common/http';
+import { StoreModule } from '@ngrx/store';
+import { homeStateKey, reducer } from '../home/state';
+import { EffectsModule } from '@ngrx/effects';
+import { HomeEffects } from '../home/state/home.effects';
 
 
 @NgModule({
@@ -22,19 +24,19 @@ import { HttpClientModule } from '@angular/common/http';
     SearchRecipesComponent,
     SavedRecipesComponent,
     AdvancedSearchComponent,
-    SavedTableComponent,
-    RecipeDetailsComponent,
+    SavedTableComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
     DashboardRoutingModule,
-    ChartsModule,
     SharedModule,
-    HttpClientModule
+    HttpClientModule,
+    StoreModule.forFeature(homeStateKey, reducer),
+    EffectsModule.forFeature([HomeEffects])
   ],
   exports: [
-    DashboardComponent
+    DashboardComponent,
   ]
 })
 export class DashboardModule { }

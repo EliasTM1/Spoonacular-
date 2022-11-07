@@ -1,10 +1,7 @@
 
 .card-contnr {
-  border: 1px black solid;
   border-radius: 5px;
-  /* display: flex; */
-  /* flex-direction: column; */
-  width: 40%;
+  width: 50%;
   margin: auto;
   margin-top: 5rem;
 }
@@ -17,7 +14,6 @@
 
 .card-img {
   border-radius: 5px;
-  /* display: block; */
   height: 100%;
   width: 100%;
   background-color: transparent;
@@ -30,10 +26,12 @@
   font-weight: bolder;
   text-align: center;
   background-color: transparent;
-  border-bottom: 2px black solid;
-  border-top: 2px black solid;
 }
 .card-desc {
+  background-color: transparent;
+  padding: 20px 20px;
+}
+.card-summary {
   background-color: transparent;
   padding: 20px 20px;
 }
@@ -47,7 +45,6 @@
 button {
   background-color: transparent;
   border: none;
-  border-top: 1px black solid;
   width: 100%;
 }
 

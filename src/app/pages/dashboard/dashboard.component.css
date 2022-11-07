@@ -10,6 +10,8 @@ li{
   padding: 10px;
   list-style: none;
   text-align: center;
+  font-family: 'Ubuntu', sans-serif;
+
 }
 
 li:hover{

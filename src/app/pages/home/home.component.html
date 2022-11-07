@@ -2,6 +2,14 @@
   <app-card-demo *ngIf="randomRecipes ; else loading" [randomRecipe]="randomRecipes"></app-card-demo>
 <router-outlet></router-outlet>
 
+<!-- {{randomRecipeAPI$ | async}} -->
+
 <ng-template #loading>
   <app-loading></app-loading>
 </ng-template>
+
+<ng-template #error>
+  <app-error></app-error>
+</ng-template>
+
+

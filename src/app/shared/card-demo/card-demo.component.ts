@@ -10,7 +10,11 @@ import {
   RandomRecipe,
 } from 'src/app/interfaces/api/randomApi.interface';
 import { CardIcons } from 'src/app/interfaces/user.interface';
-
+import { Store } from '@ngrx/store';
+import { HomeSelectors, HomeActions } from '../../pages/home/state/index'
+import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, first, map } from 'rxjs/operators';
+import { StoredRandmRecipe } from '../../pages/home/state/home.reducer';
 @Component({
   selector: 'app-card-demo',
   templateUrl: './card-demo.component.html',
@@ -20,10 +24,8 @@ export class CardDemoComponent implements  OnInit, OnChanges {
   @Input() randomRecipe!: RandomRecipe;
   // * UI
   public errorUi: boolean = false;
-  public isLoading: boolean = true;
+  public isLoading: boolean = false;
   public isDetails: boolean = false;
-
-
   // * bhv
   public newRandomMap!: any[];
   public groupedLikesIcos: CardIcons[] = [];
@@ -38,6 +40,7 @@ export class CardDemoComponent implements  OnInit, OnChanges {
   public ingredients: ExtendedIngredient[] = [];
   public prepTime: number = 0;
   public readyInMinutes: number = 0;
+  public summary : string = '';
   public susteinable: boolean = false;
   // * Card Icons
   public cheap: boolean = false;
@@ -46,8 +49,12 @@ export class CardDemoComponent implements  OnInit, OnChanges {
   public vegan: boolean = false;
   public vegetarian: boolean = false;
   public veryHealthy: boolean = false;
+  // * Store
+  public storedRecipe!: StoredRandmRecipe
 
-  constructor() {}
+  constructor(
+    private store : Store
+  ) {}
 
   ngOnInit(): void {
     if(!this.randomRecipe) {
@@ -66,7 +73,9 @@ export class CardDemoComponent implements  OnInit, OnChanges {
     this.readyInMinutes = this.randomRecipe.readyInMinutes;
     this.prepTime = this.randomRecipe.preparationMinutes;
     this.id = this.randomRecipe.id;
+    this.summary = this.randomRecipe.summary
     this.packIcons();
+    this.storeRandomRecipe();
     this.isLoading = false;
   }
 
@@ -86,7 +95,36 @@ export class CardDemoComponent implements  OnInit, OnChanges {
     this.isDetails = true;
   }
 
-  showDetails() {
+  storeRandomRecipe() {
+    //  * Synch
+    // this.store.dispatch(HomeActions.storeRandomRecipe({
+    //   storedRandomRecipe : this.buildStoredRecipe()
+    // }))
+  }
 
+  buildStoredRecipe() : StoredRandmRecipe {
+    return {
+      vegetarian : this.randomRecipe.vegetarian,
+      vegan : this.randomRecipe.vegan,
+      glutenFree : this.randomRecipe.glutenFree,
+      dairyFree : this.randomRecipe.dairyFree,
+      veryHealthy : this.randomRecipe.veryHealthy,
+      cheap : this.randomRecipe.cheap,
+      instructions : this.randomRecipe.instructions,
+      id : this.randomRecipe.id,
+      title : this.randomRecipe.title,
+      aggregateLikes : this.randomRecipe.aggregateLikes,
+      analyzedInstructions : this.randomRecipe.analyzedInstructions,
+      extendedIngredients : this.randomRecipe.extendedIngredients,
+      image: this.randomRecipe.image,
+      summary: this.randomRecipe.summary,
+      isLoadingAPI : false,
+      errorAPI : false,
+      fromRandomRecipeAPI: undefined,
+    }
+  }
+
+  closeModal() {
+    this.isDetails = false;
   }
 }

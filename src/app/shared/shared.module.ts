@@ -9,6 +9,10 @@ import { CardDemoComponent } from './card-demo/card-demo.component';
 import { SearchScreenComponent } from './search-screen/search-screen.component';
 import { PillComponent } from './pill/pill.component';
 import { RouterModule } from '@angular/router';
+import { RecipeDetailsComponent } from './recipe-details/recipe-details.component';
+import { ChartsModule } from '../charts/charts.module';
+import { SideBarComponent } from './side-bar/side-bar.component';
+import { GridComponent } from '../pages/grid/grid.component';
 
 
 
@@ -21,11 +25,15 @@ import { RouterModule } from '@angular/router';
     ErrorComponent,
     CardDemoComponent,
     SearchScreenComponent,
-    PillComponent
+    PillComponent,
+    RecipeDetailsComponent,
+    SideBarComponent,
+    GridComponent
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    ChartsModule,
   ],
   exports: [
     LoadingComponent,
@@ -35,7 +43,10 @@ import { RouterModule } from '@angular/router';
     CardIconsComponent,
     CardDemoComponent,
     SearchScreenComponent,
-    PillComponent
+    PillComponent,
+    RecipeDetailsComponent,
+    SideBarComponent,
+    GridComponent
   ]
 })
 export class SharedModule { }
